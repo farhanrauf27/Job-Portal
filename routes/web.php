@@ -39,8 +39,33 @@ Route::middleware(['auth', CheckAdmin::class])->prefix('admin')->name('admin.')-
 
 
 // Company
-Route::prefix('company')->name('company.')->group(function () {
-    Route::get('dashboard', [CompanyController::class, 'dashboard'])->name('dashboard');
-   
-});
 
+
+use App\Http\Controllers\CompanyAuthController;
+
+Route::get('/company/register', [CompanyAuthController::class, 'showRegisterForm'])->name('company.register');
+Route::post('/company/register', [CompanyAuthController::class, 'register']);
+Route::get('/company/login', [CompanyAuthController::class, 'showLoginForm'])->name('company.login');
+Route::post('/company/login', [CompanyAuthController::class, 'login']);
+Route::post('/company/logout', [CompanyAuthController::class, 'logout'])->name('company.logout');
+Route::get('/companydashboard', [CompanyController::class, 'dashboard'])->name('company.dashboard');
+
+    // Route::get('/companycreate-job', [CompanyController::class, 'createJob'])->name('company.createJob');
+    // Route::post('/companystore-job', [CompanyController::class, 'storeJob'])->name('company.storeJob');
+
+    // Route::middleware(['auth:company'])->group(function () {
+    //     Route::get('/company/jobs', [CompanyController::class, 'showJobs'])->name('company.showJobs');
+    //     Route::get('/company/jobs/{id}/edit', [CompanyController::class, 'editJob'])->name('company.editJob');
+    //     Route::delete('/company/jobs/{id}', [CompanyController::class, 'deleteJob'])->name('company.deleteJob');
+    // });
+
+    Route::middleware(['auth:company'])->group(function () {
+        Route::get('/company/jobs', [CompanyController::class, 'showJobs'])->name('company.showJobs');
+        Route::get('/company/create-job', [CompanyController::class, 'createJob'])->name('company.createJob');
+        Route::post('/company/store-job', [CompanyController::class, 'storeJob'])->name('company.storeJob');
+        Route::get('/company/jobs/{id}/edit', [CompanyController::class, 'editJob'])->name('company.editJob');
+        Route::delete('/company/jobs/{id}', [CompanyController::class, 'deleteJob'])->name('company.deleteJob');
+        Route::put('/company/jobs/{id}', [CompanyController::class, 'updateJob'])->name('company.updateJob');
+        Route::get('/company/{id}/update-profile', [CompanyController::class, 'editProfile'])->name('company.editProfile');
+        Route::put('/company/{id}/update-profile', [CompanyController::class, 'updateProfile'])->name('company.updateProfile');
+    });

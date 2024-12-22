@@ -40,6 +40,7 @@
                                     <!-- Show Login/Register buttons when the user is not logged in -->
                                     <a href="{{ route('register') }}" class="btn head-btn1">Register</a>
                                     <a href="{{ route('login') }}" class="btn head-btn2">Login</a>
+                                    <a href="{{ route('company.login') }}" class="btn head-btn2">Company</a>
                                 @endguest
                             
                                 @auth

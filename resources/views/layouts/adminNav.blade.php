@@ -70,8 +70,18 @@
 <div class="sidebar">
     <ul class="nav flex-column">
         <div class="logo mb-4">
-            <a href="{{route('admin.dashboard')}}"><img src="{{asset('assets/img/logo/logo.png')}}" alt=""></a>
-        </div>          <!-- Dashboard -->
+            @if(Auth::guard('company')->check() && Auth::guard('company')->user()->logo)
+                <a href="{{ route('company.dashboard') }}">
+                    <img src="{{ asset('storage/logos/' . Auth::guard('company')->user()->logo) }}" alt="Company Logo" style="max-width: 100px;">
+                </a>
+            @else
+                <a href="{{ route('company.dashboard') }}">
+                    <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Default Logo">
+                </a>
+            @endif
+        </div>
+        
+                <!-- Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
