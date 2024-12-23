@@ -56,15 +56,21 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at->format('d-m-Y') }}</td>
                     <td class="d-flex justify-content-between">
-                        <a href="#" class="btn btn-warning btn-sm" title="Edit User">
+                        <a href="#" class="special-button-blue" title="Edit User">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <!-- Add a Delete button with confirmation -->
-                        <a href="#" class="btn btn-danger btn-sm" title="Delete User" onclick="return confirm('Are you sure you want to delete this user?')">
-                            <i class="fas fa-trash"></i> Delete
-                        </a>
+                
+                        <!-- Delete form -->
+                        <form action="{{ route('admin.deleteUser', $user->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="special-button-red" title="Delete User" onclick="return confirm('Are you sure you want to delete this user?')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
                     </td>
                 </tr>
+                
                 @endforeach
             </tbody>
         </table>

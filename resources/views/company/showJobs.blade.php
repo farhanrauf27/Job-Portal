@@ -1,9 +1,9 @@
 @extends('layouts.companyNav') {{-- Assuming you're extending a layout for the company sidebar --}}
 
 @section('content')
-<div class="container mt-5">
-    <h2 class="mb-4 text-primary"><i class="fas fa-briefcase"></i> Your Jobs</h2>
 
+<div class="container">
+    <h2 class="mb-4 text-primary"><i class="fas fa-briefcase"></i> Your Jobs</h2>
     @if($jobs->isEmpty())
         <div class="alert alert-warning text-center">
             <i class="fas fa-exclamation-circle"></i> No jobs have been created yet.

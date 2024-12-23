@@ -67,11 +67,18 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="posted_date" class="form-label text-dark fw-bold"><i class="fas fa-clock me-2"></i> Posted Date</label>
-                    <input type="date" class="form-control rounded-pill" name="posted_date" id="posted_date" value="{{ old('posted_date', $job->posted_date) }}">
+                    <input 
+                        type="date" 
+                        class="form-control rounded-pill" 
+                        name="posted_date" 
+                        id="posted_date" 
+                        value="{{ old('posted_date', $job->posted_date) }}" 
+                        @if(isset($job) && $job->exists) readonly @endif>
                     @error('posted_date')
                         <div class="text-danger mt-1 small">{{ $message }}</div>
                     @enderror
                 </div>
+                
                 <div class="col-md-6">
                     <label for="location" class="form-label text-dark fw-bold"><i class="fas fa-map-marker-alt me-2"></i> Location</label>
                     <input type="text" class="form-control rounded-pill" name="location" id="location" value="{{ old('location', $job->location) }}">

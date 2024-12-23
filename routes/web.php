@@ -32,6 +32,13 @@ Route::middleware(['auth', CheckAdmin::class])->prefix('admin')->name('admin.')-
     // Admin dashboard route
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('users', [AdminController::class, 'showUsers'])->name('users');
+    Route::delete('users/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
+    Route::get('jobs', [AdminController::class, 'showJobs'])->name('jobs');
+    Route::delete('jobs/{job}', [AdminController::class, 'deleteJob'])->name('deleteJob');
+    Route::get('jobs/{id}', [AdminController::class, 'viewJob'])->name('viewJob');
+
+
+
 });
 
 
@@ -69,3 +76,15 @@ Route::get('/companydashboard', [CompanyController::class, 'dashboard'])->name('
         Route::get('/company/{id}/update-profile', [CompanyController::class, 'editProfile'])->name('company.editProfile');
         Route::put('/company/{id}/update-profile', [CompanyController::class, 'updateProfile'])->name('company.updateProfile');
     });
+
+
+
+    // User
+    use App\Http\Controllers\UserController;
+
+    Route::get('/', [UserController::class, 'index'])->name('jobs');
+    Route::get('/allJobs', [UserController::class, 'allJobs'])->name('allJobs');
+    Route::get('/allJobs/sort', [UserController::class, 'allJobs'])->name('allJobs.sort');
+    
+
+

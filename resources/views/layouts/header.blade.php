@@ -1,7 +1,44 @@
 <x-bootstrap/>
 <!-- Font Awesome CDN -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<style>
+    .custom-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
 
+.custom-btn-primary {
+    background-color: #007bff; /* Primary Blue */
+    color: #fff;
+    border: 2px solid #007bff;
+}
+
+.custom-btn-primary:hover {
+    background-color: #0056b3; /* Darker Blue */
+    border-color: #0056b3;
+    color: #fff;
+}
+
+.custom-btn-secondary {
+    background-color: #6c757d; /* Secondary Gray */
+    color: #fff;
+    border: 2px solid #6c757d;
+}
+
+.custom-btn-secondary:hover {
+    background-color: #5a6268; /* Darker Gray */
+    border-color: #5a6268;
+    color: #fff;
+}
+
+</style>
 <header>
    <div class="header-area header-transparrent">
        <div class="headder-top header-sticky">
@@ -10,8 +47,9 @@
                     <div class="col-lg-3 col-md-2">
                        
                         <div class="logo">
-                            <a href="{{route('home')}}"><img src="assets/img/logo/logo.png" alt=""></a>
-                        </div>  
+                            <a href="{{ url('/') }}">
+                                <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Logo">
+                            </a>                        </div>  
                     </div>
                     <div class="col-lg-9 col-md-9">
                         <div class="menu-wrapper">
@@ -19,8 +57,8 @@
                             <div class="main-menu">
                                 <nav class="d-none d-lg-block">
                                     <ul id="navigation">
-                                        <li><a href="{{route('home')}}">Home</a></li>
-                                        <li><a href="job_listing.html">Find a Jobs </a></li>
+                                        <li><a href="{{ url('/') }}">Home</a></li>
+                                        <li><a href="{{route('allJobs')}}">Find a Jobs </a></li>
                                         <li><a href="about.html">About</a></li>
                                         <li><a href="#">Page</a>
                                             <ul class="submenu">
@@ -38,9 +76,10 @@
                             <div class="header-btn d-none f-right d-lg-block">
                                 @guest
                                     <!-- Show Login/Register buttons when the user is not logged in -->
-                                    <a href="{{ route('register') }}" class="btn head-btn1">Register</a>
-                                    <a href="{{ route('login') }}" class="btn head-btn2">Login</a>
-                                    <a href="{{ route('company.login') }}" class="btn head-btn2">Company</a>
+                                    <a href="{{ route('register') }}" class=" custom-btn custom-btn-primary">Register</a>
+<a href="{{ route('login') }}" class=" custom-btn custom-btn-secondary">Login</a>
+<a href="{{ route('company.login') }}" class=" custom-btn custom-btn-secondary">Company</a>
+
                                 @endguest
                             
                                 @auth

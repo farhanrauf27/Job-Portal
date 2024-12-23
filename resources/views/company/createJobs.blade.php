@@ -48,12 +48,32 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="posted_date" class="form-label fw-bold">Posted Date</label>
-                                <input type="date" name="posted_date" id="posted_date" class="form-control form-control-lg rounded-pill" required>
+                                <input type="date" name="posted_date" id="posted_date" class="form-control form-control-lg rounded-pill" readonly required>
                             </div>
+                            
+                            <script>
+                                // Get today's date in YYYY-MM-DD format
+                                const today = new Date().toISOString().split("T")[0];
+                            
+                                // Set the value of the posted_date field to today's date
+                                const postedDateInput = document.getElementById("posted_date");
+                                postedDateInput.value = today;
+                            </script>
+                            
                             <div class="col-md-6 mb-3">
                                 <label for="application_date" class="form-label fw-bold">Application Deadline</label>
                                 <input type="date" name="application_date" id="application_date" class="form-control form-control-lg rounded-pill" required>
                             </div>
+                            
+                            <script>
+                                // Get today's date in YYYY-MM-DD format
+                                const todayx = new Date().toISOString().split("T")[0];
+                            
+                                // Set the minimum date attribute
+                                const applicationDateInput = document.getElementById("application_date");
+                                applicationDateInput.setAttribute("min", todayx);
+                            </script>
+                            
                         </div>
                         
                         <!-- Location and Vacancy -->
@@ -74,10 +94,11 @@
                                 <label for="job_nature" class="form-label fw-bold">Job Nature</label>
                                 <select name="job_nature" id="job_nature" class="form-control form-control-lg rounded-pill" required>
                                     <option value="" disabled selected>Select job nature</option>
-                                    <option value="Full-time">Full-time</option>
+                                    <option value="Full-Time">Full-time</option>
                                     <option value="Part-time">Part-time</option>
                                     <option value="Contract">Contract</option>
                                     <option value="Internship">Internship</option>
+                                    <option value="Remote">Remote</option>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">

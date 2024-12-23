@@ -60,6 +60,76 @@
 .sidebar .nav-item ul.nav .nav-link {
     padding: 8px 20px;
 }
+.special-button-red {
+        background-color: red; 
+        color: #fff; 
+        border: none; 
+        border-radius: 5px;
+        padding: 8px 12px; 
+        font-size: 14px; 
+        font-weight: bold; 
+        transition: all 0.3s ease; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        display: inline-flex;
+        align-items: center; 
+        gap: 6px; 
+        cursor: pointer; 
+    }
+    .special-button-blue {
+        background-color: blue; /* Bright red color for visibility */
+        color: #fff; /* White text */
+        border: none; /* Remove default border */
+        border-radius: 5px; /* Rounded corners */
+        padding: 8px 12px; /* Padding for a comfortable click area */
+        font-size: 14px; /* Text size */
+        font-weight: bold; /* Bold text for emphasis */
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        display: inline-flex; /* Align icon and text properly */
+        align-items: center; /* Vertical alignment */
+        gap: 6px; /* Space between icon and text */
+        cursor: pointer; /* Pointer cursor for clarity */
+    }
+    .special-button-green {
+        background-color: green; 
+        color: #fff; 
+        border: none; 
+        border-radius: 5px;
+        padding: 8px 12px; 
+        font-size: 14px; 
+        font-weight: bold; 
+        transition: all 0.3s ease; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        display: inline-flex;
+        align-items: center; 
+        gap: 6px; 
+        cursor: pointer; 
+    }
+    .special-button-yellow {
+        background-color: yellow; 
+        color: #000; 
+        border: none; 
+        border-radius: 5px;
+        padding: 8px 12px; 
+        font-size: 14px; 
+        font-weight: bold; 
+        transition: all 0.3s ease; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+        display: inline-flex;
+        align-items: center; 
+        gap: 6px; 
+        cursor: pointer; 
+    }
+    
+    .special-button-red:hover,
+    .special-button-blue:hover,
+    .special-button-yellow:hover,
+    .special-button-green:hover {
+        background-color: #2c3e50; /* Darker red for hover effect */
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+        transform: translateY(-2px); 
+        color: white;
+    }
 
         </style>
 
@@ -69,17 +139,7 @@
 
 <div class="sidebar">
     <ul class="nav flex-column">
-        <div class="logo mb-4">
-            @if(Auth::guard('company')->check() && Auth::guard('company')->user()->logo)
-                <a href="{{ route('company.dashboard') }}">
-                    <img src="{{ asset('storage/logos/' . Auth::guard('company')->user()->logo) }}" alt="Company Logo" style="max-width: 100px;">
-                </a>
-            @else
-                <a href="{{ route('company.dashboard') }}">
-                    <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Default Logo">
-                </a>
-            @endif
-        </div>
+        
         
                 <!-- Dashboard -->
         <li class="nav-item">
@@ -98,26 +158,9 @@
 
         <!-- Jobs -->
         <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{route('admin.jobs')}}">
                 <i class="fas fa-briefcase"></i> Jobs
             </a>
-            <ul class="nav flex-column ml-3">
-                <li class="nav-item">
-                    <a class="nav-link" href="">
-                        <i class="fas fa-check-circle"></i> Active
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">
-                        <i class="fas fa-clock"></i> Pending
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">
-                        <i class="fas fa-th-large"></i> Categories
-                    </a>
-                </li>
-            </ul>
         </li>
 
         <!-- Applications -->
@@ -216,6 +259,14 @@
 <!-- Add appropriate CSS styles to make it look good -->
 
 <div class="content">
+    <div class="container d-flex justify-content-center">
+        <div class="text-center mt-5">
+            <a href="">
+                <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Logo" class="mb-3" style="max-width: 150px;">
+            </a>
+            <h2 class="mb-4"> {{$user->name}}- Admin Dashboard</h2>
+        </div>
+    </div>
     @yield('content')
 </div>
 

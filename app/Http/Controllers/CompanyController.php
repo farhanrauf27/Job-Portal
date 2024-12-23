@@ -11,24 +11,27 @@ class CompanyController extends Controller
 {
     // Show the company dashboard view
     public function dashboard()
-    {
-        if (Auth::guard('company')->check()) {
-            $company = Auth::guard('company')->user();
-            return view('company.dashboard', compact('company'));
-        } else {
-            return redirect()->route('company.login');
-        }
+{
+    if (Auth::guard('company')->check()) {
+        $company = Auth::guard('company')->user();
+        $companyLogo = $company->logo; // Assuming 'logo' is the field in the companies table
+
+        return view('company.dashboard', compact('company', 'companyLogo',));
+    } else {
+        return redirect()->route('company.login');
     }
+}
+
 
     // Show the job creation form
     public function createJob()
     {
-        // Ensure the company is logged in
+        $company = Auth::guard('company')->user();
         if (!Auth::guard('company')->check()) {
             return redirect()->route('company.login');  // Redirect to login if not authenticated
         }
 
-        return view('company.createJobs');  // Show the job creation form
+        return view('company.createJobs', compact('company'));  // Show the job creation form
     }
 
     // Store the job in the database
@@ -85,21 +88,22 @@ class CompanyController extends Controller
         $jobs = Job::where('company_id', $company->id)->get();
 
         // Return the view with jobs data
-        return view('company.showJobs', compact('jobs'));
+        return view('company.showJobs', compact('jobs','company'));
     }
 
     // Show the job edit form
     public function editJob($id)
 {
     $job = Job::findOrFail($id);
-    
+    $company = Auth::guard('company')->user();
+
     // Ensure the job belongs to the logged-in company
     if ($job->company_id !== Auth::guard('company')->id()) {
         return redirect()->route('company.showJobs')->with('error', 'Unauthorized access.');
     }
 
     // Pass the job data to the view, where toDateString will work
-    return view('company.editJob', compact('job'));
+    return view('company.editJob', compact('job','company'));
 }
 
 
@@ -182,7 +186,7 @@ class CompanyController extends Controller
     // Validate the request
     $request->validate([
         'company_name' => 'required|string|max:255',
-        'logo' => 'nullable|file|max:2048', // Adjusted validation rule
+        'logo' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Add MIME types to validate
         'company_info' => 'nullable|string',
         'email' => 'required|email',
         'phone_number' => 'nullable|string',
@@ -190,44 +194,42 @@ class CompanyController extends Controller
         'address' => 'nullable|string',
     ]);
 
-    // Find the company by id
     $company = Company::findOrFail($id);
 
-    // If logo is uploaded, store it
     if ($request->hasFile('logo')) {
         $logo = $request->file('logo');
         $filename = uniqid() . '.' . $logo->getClientOriginalExtension();
         
-        // Define the directory path
-        $directory = public_path('storage/logos/');
-        
-        // Ensure the directory exists
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true); // Create directory with permissions
+        // Check if there is an existing logo and delete it
+        if ($company->logo) {
+            // Delete the old logo from storage
+            $oldLogoPath = public_path('storage/logos/' . $company->logo);
+            if (file_exists($oldLogoPath)) {
+                unlink($oldLogoPath);  // Remove the old logo
+            }
         }
-        
-        // Save the file manually
-        $path = $directory . $filename;
-        file_put_contents($path, file_get_contents($logo));
-        
-        // Save filename to the database
+
+        // Store the new logo in the storage/app/public/logos directory
+        $path = $logo->storeAs('logos', $filename);
+
+        // Update the company with the new logo path
         $company->logo = $filename;
     }
-    
-    
 
-    // Update the company fields
+    // Update other company details
     $company->company_name = $request->company_name;
     $company->company_info = $request->company_info;
     $company->email = $request->email;
     $company->phone_number = $request->phone_number;
     $company->web_link = $request->web_link;
     $company->address = $request->address;
-    $company->logo = $request->logo;
     $company->save();
 
     return redirect()->route('company.editProfile', $company->id)
                      ->with('success', 'Company profile updated successfully!');
 }
+
+
+    
 
 }
