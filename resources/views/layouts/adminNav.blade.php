@@ -182,7 +182,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">
+                    <a class="nav-link" href="{{ route('admin.analytics') }}">
                         <i class="fas fa-chart-pie"></i> Job Analytics
                     </a>
                 </li>

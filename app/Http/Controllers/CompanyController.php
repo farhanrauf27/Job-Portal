@@ -48,6 +48,7 @@ class CompanyController extends Controller
             'job_description' => 'required',
             'required_skills' => 'required',
             'education_experience' => 'required',
+            'category' => 'required',
             'posted_date' => 'required|date',
             'location' => 'required',
             'vacancy' => 'required|integer',
@@ -63,6 +64,7 @@ class CompanyController extends Controller
         $job->job_description = $request->input('job_description');
         $job->required_skills = $request->input('required_skills');
         $job->education_experience = $request->input('education_experience');
+        $job->category = $request->input('category');
         $job->posted_date = $request->input('posted_date');
         $job->location = $request->input('location');
         $job->vacancy = $request->input('vacancy');
@@ -124,6 +126,7 @@ class CompanyController extends Controller
         'job_description' => 'required',
         'required_skills' => 'required',
         'education_experience' => 'required',
+        'category' => 'required',
         'posted_date' => 'required|date',
         'location' => 'required',
         'vacancy' => 'required|integer',
@@ -137,6 +140,7 @@ class CompanyController extends Controller
     $job->job_description = $request->input('job_description');
     $job->required_skills = $request->input('required_skills');
     $job->education_experience = $request->input('education_experience');
+    $job->category = $request->input('category');
     $job->posted_date = $request->input('posted_date');
     $job->location = $request->input('location');
     $job->vacancy = $request->input('vacancy');

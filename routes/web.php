@@ -17,7 +17,7 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 
@@ -36,6 +36,7 @@ Route::middleware(['auth', CheckAdmin::class])->prefix('admin')->name('admin.')-
     Route::get('jobs', [AdminController::class, 'showJobs'])->name('jobs');
     Route::delete('jobs/{job}', [AdminController::class, 'deleteJob'])->name('deleteJob');
     Route::get('jobs/{id}', [AdminController::class, 'viewJob'])->name('viewJob');
+    Route::get('job-analytics', [AdminController::class, 'showJobAnalytics'])->name('analytics');
 
 
 
@@ -85,6 +86,5 @@ Route::get('/companydashboard', [CompanyController::class, 'dashboard'])->name('
     Route::get('/', [UserController::class, 'index'])->name('jobs');
     Route::get('/allJobs', [UserController::class, 'allJobs'])->name('allJobs');
     Route::get('/allJobs/sort', [UserController::class, 'allJobs'])->name('allJobs.sort');
+    Route::get('/job_details/{id}', [UserController::class, 'showJobDetails'])->name('job.details');
     
-
-

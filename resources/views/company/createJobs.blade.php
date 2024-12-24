@@ -43,6 +43,17 @@
                             <label for="education_experience" class="form-label fw-bold">Education & Experience</label>
                             <textarea name="education_experience" id="education_experience" class="form-control rounded-lg" rows="3" placeholder="Specify the qualifications and experience needed" required></textarea>
                         </div>
+                        <!-- Category -->
+    <div class="mb-3">
+        <label for="category" class="form-label fw-bold">Category</label>
+        <select name="category" id="category" class="form-control form-control-lg rounded-pill" required>
+            <option value="" disabled selected>Select Category</option>
+            <option value="Design & Creative">Design & Creative</option>
+            <option value="Design & Development">Design & Development</option>
+            <option value="Sales & Marketing">Sales & Marketing</option>
+            <option value="Mobile Application">Mobile Application</option>
+        </select>
+    </div>
                         
                         <!-- Dates -->
                         <div class="row">

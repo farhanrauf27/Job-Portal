@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Job; 
 use Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -62,6 +64,32 @@ public function viewJob($id)
     // Return a view with the job details
     return view('admin.jobDetails', compact('job','user'));
 }
+
+public function showJobAnalytics()
+{
+    $user = Auth::user();
+    $totalJobs = Job::count();
+
+    // Fetch the number of jobs posted each month (last 12 months)
+    $jobsByMonth = Job::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+                      ->where('created_at', '>=', Carbon::now()->subYear())
+                      ->groupBy('month')
+                      ->orderBy('month')
+                      ->get();
+
+    // Fetch jobs grouped by job category
+    $jobsByCategory = Job::select('category', DB::raw('count(*) as total'))
+                         ->groupBy('category')
+                         ->get();
+
+    // Prepare category data for chart
+    $categoryLabels = $jobsByCategory->pluck('category')->toArray(); // Extract categories
+    $categoryCounts = $jobsByCategory->pluck('total')->toArray(); // Extract job counts
+
+    return view('admin.jobAnalytics', compact('totalJobs', 'jobsByMonth', 'categoryLabels', 'categoryCounts', 'user'));
+}
+
+
 
 
 }

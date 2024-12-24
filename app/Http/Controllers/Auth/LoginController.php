@@ -47,6 +47,6 @@ class LoginController extends Controller
         elseif ($user->type == 2) {
             return redirect()->route('company.dashboard');
         }
-        return redirect()->route('home'); 
+        return redirect('/');
     }
 }

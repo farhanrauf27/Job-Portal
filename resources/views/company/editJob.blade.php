@@ -62,6 +62,20 @@
                     <div class="text-danger mt-1 small">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="form-group mb-3">
+                <label for="category" class="form-label text-dark fw-bold">Job Category</label>
+                <select class="form-control rounded-3" name="category" id="category" required>
+                 
+                    <option value="Design & Creative" {{ old('category', $job->category) == 'Design & Creative' ? 'selected' : '' }}>Design & Creative</option>
+                    <option value="Design & Development" {{ old('category', $job->category) == 'Design & Development' ? 'selected' : '' }}>Design & Development</option>
+                    <option value="Sales & Marketing" {{ old('category', $job->category) == 'Sales & Marketing' ? 'selected' : '' }}>Sales & Marketing</option>
+                    <option value="Mobile Application" {{ old('category', $job->category) == 'Mobile Application' ? 'selected' : '' }}>Mobile Application</option>
+                </select>
+                @error('category')
+                    <div class="text-danger mt-1 small">{{ $message }}</div>
+                @enderror
+            </div>
+            
 
             <!-- Other Fields -->
             <div class="row g-3">
