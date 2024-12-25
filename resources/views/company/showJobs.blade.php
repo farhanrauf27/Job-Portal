@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="container">
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
     <h2 class="mb-4 text-primary"><i class="fas fa-briefcase"></i> Your Jobs</h2>
     @if($jobs->isEmpty())
         <div class="alert alert-warning text-center">
@@ -13,6 +18,7 @@
             <table class="table table-striped table-hover align-middle">
                 <thead class="bg-primary text-white">
                     <tr>
+                        <th>SR No.</th>
                         <th>Job Title</th>
                         <th>Job Description</th>
                         <th>Location</th>
@@ -25,13 +31,16 @@
                 <tbody>
                     @foreach($jobs as $job)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td class="fw-bold">{{ $job->job_title }}</td>
-                            <td>{{ Str::limit($job->job_description, 100) }}</td>
+                            <td class="job-description">
+                                {{ Str::limit($job->job_description, 100) }}
+                            </td>
                             <td>{{ $job->location }}</td>
                             <td class="text-center">{{ $job->vacancy }}</td>
                             <td>{{ \Carbon\Carbon::parse($job->posted_date)->format('d M, Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($job->application_date)->format('d M, Y') }}</td>
-                            <td>
+                            <td class="actions">
                                 <a href="{{ route('company.editJob', $job->id) }}" class="special-button-blue">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
@@ -50,6 +59,7 @@
         </div>
     @endif
 </div>
+
 @endsection
 
 <style>
@@ -81,4 +91,22 @@
     transform: translateY(0); /* Reset lift effect */
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Reduce shadow on click */
 }
+.actions {
+           
+            align-items: center;
+            /* gap: 10px; */
+        }
+
+        .actions a,
+        .actions button {
+            white-space: nowrap; /* Prevent wrapping of text */
+        }
+
+        /* Limit the width of the job description column */
+        .job-description {
+            max-width: 180px;  /* Set a maximum width for the job description */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; /* Ensures the description stays in one line */
+        }
 </style>

@@ -6,8 +6,8 @@ use App\Models\Job;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -70,24 +70,73 @@ public function showJobAnalytics()
     $user = Auth::user();
     $totalJobs = Job::count();
 
-    // Fetch the number of jobs posted each month (last 12 months)
-    $jobsByMonth = Job::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-                      ->where('created_at', '>=', Carbon::now()->subYear())
-                      ->groupBy('month')
-                      ->orderBy('month')
-                      ->get();
+    // Fetch the number of jobs posted in each month of the current year
+    $jobsByMonth = Job::selectRaw('MONTH(posted_date) as month, COUNT(*) as total')
+    ->whereYear('created_at', Carbon::now()->year)
+    ->groupBy('month')
+    ->orderBy('month')
+    ->get();
+
+// Fill missing months with zero
+$monthsData = collect(range(1, 12))->map(function ($month) use ($jobsByMonth) {
+$job = $jobsByMonth->firstWhere('month', $month);
+return [
+'month' => $month,
+'total' => $job ? $job->total : 0,
+];
+});
+
 
     // Fetch jobs grouped by job category
     $jobsByCategory = Job::select('category', DB::raw('count(*) as total'))
                          ->groupBy('category')
                          ->get();
 
-    // Prepare category data for chart
+    // Fetch jobs grouped by job nature
+    $jobsByNature = Job::select('job_nature', DB::raw('count(*) as total'))
+                       ->groupBy('job_nature')
+                       ->get();
+
+    // Prepare data for charts
     $categoryLabels = $jobsByCategory->pluck('category')->toArray(); // Extract categories
     $categoryCounts = $jobsByCategory->pluck('total')->toArray(); // Extract job counts
+    $natureLabels = array_map('ucfirst', $jobsByNature->pluck('job_nature')->toArray());
+    $natureCounts = $jobsByNature->pluck('total')->toArray(); // Extract job counts for nature
 
-    return view('admin.jobAnalytics', compact('totalJobs', 'jobsByMonth', 'categoryLabels', 'categoryCounts', 'user'));
+    return view('admin.jobAnalytics', compact('totalJobs', 'monthsData','jobsByMonth', 'categoryLabels', 'categoryCounts', 'natureLabels', 'natureCounts', 'user'));
 }
+
+public function showUpdateProfileForm()
+{
+    $user = Auth::user();
+    return view('admin.updateProfile', compact('user'));
+}
+
+public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+
+    // Validate the incoming data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        'password' => 'nullable|confirmed|min:8',
+    ]);
+
+    // Update user details
+    $user->name = $request->input('name');
+    $user->email = $request->input('email');
+
+    // If password is provided, hash it and update
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->input('password'));
+    }
+
+    $user->save();
+
+    return redirect()->route('admin.updateProfile')->with('success', 'Profile updated successfully');
+}
+
 
 
 

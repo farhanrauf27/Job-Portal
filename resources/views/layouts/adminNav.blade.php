@@ -239,7 +239,7 @@
 
         <!-- Profile -->
         <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{{route('admin.updateProfile')}}">
                 <i class="fas fa-user-circle"></i> Profile
             </a>
         </li>

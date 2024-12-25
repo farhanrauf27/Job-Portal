@@ -37,6 +37,9 @@ Route::middleware(['auth', CheckAdmin::class])->prefix('admin')->name('admin.')-
     Route::delete('jobs/{job}', [AdminController::class, 'deleteJob'])->name('deleteJob');
     Route::get('jobs/{id}', [AdminController::class, 'viewJob'])->name('viewJob');
     Route::get('job-analytics', [AdminController::class, 'showJobAnalytics'])->name('analytics');
+    Route::get('updateProfile', [AdminController::class, 'showUpdateProfileForm'])->name('updateProfileForm');
+    Route::put('updateProfile', [AdminController::class, 'updateProfile'])->name('updateProfile');
+
 
 
 

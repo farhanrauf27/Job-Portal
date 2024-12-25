@@ -261,7 +261,8 @@
                                     </div>
                                 </div>
                                 <div class="items-link f-right">
-                                    <a href="job_details/{{ $job->id }}">{{ $job->job_nature }}</a>
+                                    <a href="job_details/{{ $job->id }}">{{ ucfirst($job->job_nature) }}
+                                    </a>
                                     <span>{{ $job->created_at->diffForHumans() }}</span>
                                 </div>
                             </div>

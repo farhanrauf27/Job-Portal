@@ -148,63 +148,71 @@
                             </div>
                             
                             <script>
-                                // Function to filter jobs based on the selected checkboxes
-                                function filterJobs() {
-                                    let selectedJobTypes = [];
-                                    const allCheckbox = document.getElementById('all-checkbox');
-                                    
-                                    // If "All" is checked, ensure only it is selected
-                                    if (allCheckbox.checked) {
-                                        document.querySelectorAll('.job-type').forEach(function(checkbox) {
-                                            if (checkbox !== allCheckbox) {
-                                                checkbox.checked = false;
-                                            }
-                                        });
-                                        selectedJobTypes.push('All');
-                                    } else {
-                                        // Otherwise, collect all checked checkboxes except "All"
-                                        document.querySelectorAll('.job-type:checked').forEach(function(checkbox) {
-                                            if (checkbox !== allCheckbox) {
-                                                selectedJobTypes.push(checkbox.value);
-                                            }
-                                        });
-                                    }
-                            
-                                    // Update the query parameter and reload the page
-                                    const url = new URL(window.location.href);
-                                    url.searchParams.set('job_types', selectedJobTypes.join(','));
-                                    window.location.href = url.toString(); // Redirect with updated parameters
-                                }
-                            
-                                // Add event listeners to the checkboxes
-                                document.querySelectorAll('.job-type').forEach(function(checkbox) {
-                                    checkbox.addEventListener('change', filterJobs);
-                                });
-                            
-                                // On page load, check the "All" checkbox or other checkboxes based on URL parameters
-                                window.addEventListener('load', function() {
-                                    const urlParams = new URLSearchParams(window.location.search);
-                                    const selectedJobTypes = urlParams.get('job_types');
-                                    const allCheckbox = document.getElementById('all-checkbox');
-                            
-                                    if (selectedJobTypes) {
-                                        const selectedTypesArray = selectedJobTypes.split(',');
-                                        document.querySelectorAll('.job-type').forEach(function(checkbox) {
-                                            if (selectedTypesArray.includes(checkbox.value)) {
-                                                checkbox.checked = true;
-                                            }
-                                        });
-                            
-                                        // If all other checkboxes are selected, uncheck "All"
-                                        if (!selectedTypesArray.includes('All')) {
-                                            allCheckbox.checked = false;
-                                        }
-                                    } else {
-                                        // No specific types selected, default to "All"
-                                        allCheckbox.checked = true;
-                                    }
-                                });
-                            </script>
+    // Function to filter jobs based on selected checkboxes
+    function filterJobs() {
+        const allCheckbox = document.getElementById('all-checkbox');
+        const jobTypeCheckboxes = document.querySelectorAll('.job-type:not(#all-checkbox)');
+
+        let selectedJobTypes = [];
+
+        if (allCheckbox.checked) {
+            // If "All" is checked, deselect all other checkboxes
+            jobTypeCheckboxes.forEach((checkbox) => (checkbox.checked = false));
+            selectedJobTypes.push('All');
+        } else {
+            // If "All" is not checked, collect all checked job type checkboxes
+            jobTypeCheckboxes.forEach((checkbox) => {
+                if (checkbox.checked) {
+                    selectedJobTypes.push(checkbox.value);
+                }
+            });
+        }
+
+        // Update the query parameter and reload the page
+        const url = new URL(window.location.href);
+        url.searchParams.set('job_types', selectedJobTypes.join(','));
+        window.location.href = url.toString(); // Redirect with updated parameters
+    }
+
+    // Add event listeners to checkboxes
+    document.querySelectorAll('.job-type').forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            if (checkbox.id !== 'all-checkbox') {
+                // If a job type checkbox is checked, uncheck "All"
+                document.getElementById('all-checkbox').checked = false;
+            }
+            filterJobs();
+        });
+    });
+
+    // On page load, check the correct checkboxes based on URL parameters
+    window.addEventListener('load', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedJobTypes = urlParams.get('job_types');
+        const allCheckbox = document.getElementById('all-checkbox');
+        const jobTypeCheckboxes = document.querySelectorAll('.job-type:not(#all-checkbox)');
+
+        if (selectedJobTypes) {
+            const selectedTypesArray = selectedJobTypes.split(',');
+
+            // Mark the correct checkboxes as checked
+            jobTypeCheckboxes.forEach((checkbox) => {
+                checkbox.checked = selectedTypesArray.includes(checkbox.value);
+            });
+
+            // Handle the "All" checkbox state
+            allCheckbox.checked = selectedTypesArray.includes('All');
+
+            if (allCheckbox.checked) {
+                // Uncheck all other checkboxes if "All" is selected
+                jobTypeCheckboxes.forEach((checkbox) => (checkbox.checked = false));
+            }
+        } else {
+            // Default to "All" if no types are selected
+            allCheckbox.checked = true;
+        }
+    });
+</script>
                             
                             
                             
@@ -265,7 +273,55 @@
                                 document.getElementById('postedWithinForm').submit();
                             }
                         </script>
-                                                
+                        {{-- Categories                         --}}
+                        <div class="single-listing">
+                            <!-- select-Categories start -->
+                            <div class="select-Categories pb-50">
+                                <form id="categoryForm" action="{{ route('allJobs') }}" method="GET">
+                                    <div class="small-section-tittle2">
+                                        <h4>Categories</h4>
+                                    </div>
+                                    <label class="container">Any
+                                        <input type="radio" name="category" value="any"
+                                            {{ !request('category') || request('category') == 'any' ? 'checked' : '' }} 
+                                            onchange="submitCategoryForm()">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Design & Creative
+                                        <input type="radio" name="category" value="Design & Creative"
+                                            {{ request('category') == 'Design & Creative' ? 'checked' : '' }} 
+                                            onchange="submitCategoryForm()">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Design & Development
+                                        <input type="radio" name="category" value="Design & Development"
+                                            {{ request('category') == 'Design & Development' ? 'checked' : '' }} 
+                                            onchange="submitCategoryForm()">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Sales & Marketing
+                                        <input type="radio" name="category" value="Sales & Marketing"
+                                            {{ request('category') == 'Sales & Marketing' ? 'checked' : '' }} 
+                                            onchange="submitCategoryForm()">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Mobile Application
+                                        <input type="radio" name="category" value="Mobile Application"
+                                            {{ request('category') == 'Mobile Application' ? 'checked' : '' }} 
+                                            onchange="submitCategoryForm()">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </form>
+                            </div>
+                            <!-- select-Categories End -->
+                        </div>
+                        <script>
+                            function submitCategoryForm() {
+                                document.getElementById('categoryForm').submit();
+                            }
+                        </script>
+                        
+                        
                         
                     </div>
                     <!-- Job Category Listing End -->
@@ -319,12 +375,13 @@
                 <ul>
                     <li><i class="fas fa-building"></i> {{ $job->company->company_name }}</li>
                     <li><i class="fas fa-map-marker-alt"></i>{{ $job->location }}</li>
-                    <li>${{ $job->salary }}</li>
+                    <li>Rs. {{ number_format($job->salary, 0) }}</li>
                 </ul>
             </div>
         </div>
         <div class="items-link f-right">
-            <a href="{{ route('job.details', $job->id) }}">{{ $job->job_nature }}</a>
+            <a href="{{ route('job.details', $job->id) }}">{{ ucfirst($job->job_nature) }}
+            </a>
             <span>{{ $job->created_at->diffForHumans() }}</span>
         </div>
     </div>

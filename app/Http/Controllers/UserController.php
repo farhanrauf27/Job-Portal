@@ -49,6 +49,11 @@ class UserController extends Controller
             // Filter jobs by selected job types
             $jobs = $jobs->whereIn('job_nature', $jobTypesArray);
         }
+          // Category filter
+    $category = $request->input('category');
+    if ($category && $category !== 'any') {
+        $jobs = $jobs->where('category', $category);
+    }
     
         // Apply sorting (if any)
         $sortBy = $request->input('sort_by');  // Get the sorting criteria from the request

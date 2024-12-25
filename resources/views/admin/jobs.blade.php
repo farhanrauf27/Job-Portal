@@ -3,7 +3,11 @@
 @section('content')
     <div class="container mt-5">
         <h1 class="text-center mb-4">Job Listings</h1>
-
+        @if(session('success'))
+        <div class="alert alert-danger">
+            {{ session('success') }}
+        </div>
+        @endif
         <!-- Job Table Section -->
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">

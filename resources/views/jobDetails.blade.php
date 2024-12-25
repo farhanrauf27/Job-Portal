@@ -37,7 +37,7 @@
                                 <ul>
                                     <li>{{ $job->company->company_name }}</li>
                                     <li><i class="fas fa-map-marker-alt"></i>{{ $job->location }}</li>
-                                    <li>${{ $job->salary }}</li>
+                                    <li>Rs. {{ number_format($job->salary, 0) }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -78,8 +78,9 @@
                             <li>Posted date : <span>{{ $job->created_at->format('d M Y') }}</span></li>
                             <li>Location : <span>{{ $job->location }}</span></li>
                             <li>Vacancy : <span>{{ $job->vacancy }}</span></li>
-                            <li>Job nature : <span>{{ $job->job_nature }}</span></li>
-                            <li>Salary : <span>${{ $job->salary }}</span></li>
+                            <li>Job nature : <span>{{ ucfirst($job->job_nature) }}
+                            </span></li>
+                            <li>Salary : <span>Rs. {{ number_format($job->salary, 0) }}</span></li>
                             <li>Application date: <span>{{ \Carbon\Carbon::parse($job->application_date)->format('d M Y') }}</span></li>
                         </ul>
                         <div class="apply-btn2">

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\Job;
 use App\Models\Company;
+use App\Mail\JobPostedNotification;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+
 
 class CompanyController extends Controller
 {
@@ -72,7 +76,11 @@ class CompanyController extends Controller
         $job->salary = $request->input('salary');
         $job->application_date = $request->input('application_date');
         
-        $job->save();  // Save the job
+        // $job->save();  // Save the job
+        // $users = User::all(); // Fetch all registered users
+        // foreach ($users as $user) {
+        //     Mail::to($user->email)->send(new JobPostedNotification($job));
+        // }
 
         return redirect()->route('company.showJobs')->with('success', 'Job created successfully.');
     }

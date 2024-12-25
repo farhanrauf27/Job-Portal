@@ -22,7 +22,7 @@ class CreateJobsTable extends Migration
             $table->string('location', 255);
             $table->integer('vacancy');
             $table->string('job_nature', 50); // e.g., Full-time, Part-time, etc.
-            $table->decimal('salary', 10, 2); // Salary in decimal format
+            $table->decimal('salary'); // Salary in decimal format
             $table->date('application_date');
             $table->timestamps();
         });

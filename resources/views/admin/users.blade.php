@@ -55,10 +55,8 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at->format('d-m-Y') }}</td>
-                    <td class="d-flex justify-content-between">
-                        <a href="#" class="special-button-blue" title="Edit User">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
+                    <td class="d-flex justify-content-center">
+                        
                 
                         <!-- Delete form -->
                         <form action="{{ route('admin.deleteUser', $user->id) }}" method="POST" style="display:inline;">

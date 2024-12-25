@@ -116,7 +116,8 @@
                         <option value="full-time" {{ $job->job_nature == 'full-time' ? 'selected' : '' }}>Full-Time</option>
                         <option value="part-time" {{ $job->job_nature == 'part-time' ? 'selected' : '' }}>Part-Time</option>
                         <option value="contract" {{ $job->job_nature == 'contract' ? 'selected' : '' }}>Contract</option>
-                        <option value="temporary" {{ $job->job_nature == 'temporary' ? 'selected' : '' }}>Temporary</option>
+                        <option value="internship" {{ $job->job_nature == 'internship' ? 'selected' : '' }}>Internship</option>
+                        <option value="remote" {{ $job->job_nature == 'remote' ? 'selected' : '' }}>Remote</option>
                     </select>
                     @error('job_nature')
                         <div class="text-danger mt-1 small">{{ $message }}</div>
