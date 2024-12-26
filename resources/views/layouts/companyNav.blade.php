@@ -156,10 +156,11 @@
             </a>
         </li>
         <li>
-            <a href="#" class="sidebar-item">
+            <a href="{{ route('company.applications') }}" class="sidebar-item">
                 <i class="fas fa-users"></i>
                 <span>Applications</span>
             </a>
+            
         </li>
         <li>
             <a href="#" class="sidebar-item">

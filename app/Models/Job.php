@@ -32,4 +32,9 @@ class Job extends Model
         'posted_date',
         'application_date',
     ];
+    public function applications()
+{
+    return $this->hasMany(JobApplication::class);
+}
+
 }

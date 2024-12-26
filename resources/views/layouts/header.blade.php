@@ -37,6 +37,30 @@
     border-color: #5a6268;
     color: #fff;
 }
+.special-button-blue {
+        background-color: blue; /* Bright red color for visibility */
+        color: #fff; /* White text */
+        border: none; /* Remove default border */
+        border-radius: 5px; /* Rounded corners */
+        padding: 8px 12px; /* Padding for a comfortable click area */
+        font-size: 14px; /* Text size */
+        font-weight: bold; /* Bold text for emphasis */
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        display: inline-flex; /* Align icon and text properly */
+        align-items: center; /* Vertical alignment */
+        gap: 6px; /* Space between icon and text */
+        cursor: pointer; /* Pointer cursor for clarity */
+    }
+
+    .special-button-red:hover,
+    .special-button-blue:hover,
+    .special-button-yellow:hover,
+    .special-button-green:hover {
+        background-color: #2c3e50; /* Darker red for hover effect */
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+        transform: translateY(-2px); /* Subtle lift effect */
+    }
 
 </style>
 <header>
@@ -90,6 +114,7 @@
                                             <i class="fas fa-user"></i> {{ Auth::user()->name }}
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                            <li><a class="dropdown-item" href="{{ route('myApplications') }}">My Applications</a></li>
                                             <li><a class="dropdown-item" href="">Profile</a></li>
                                             <li>
                                                 <form method="POST" action="{{ route('logout') }}">

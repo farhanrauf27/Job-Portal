@@ -79,7 +79,11 @@ Route::get('/companydashboard', [CompanyController::class, 'dashboard'])->name('
         Route::put('/company/jobs/{id}', [CompanyController::class, 'updateJob'])->name('company.updateJob');
         Route::get('/company/{id}/update-profile', [CompanyController::class, 'editProfile'])->name('company.editProfile');
         Route::put('/company/{id}/update-profile', [CompanyController::class, 'updateProfile'])->name('company.updateProfile');
+        Route::put('/company/application/{application}/update-status', [CompanyController::class, 'updateApplicationStatus'])->name('company.updateApplicationStatus');
     });
+
+    Route::middleware(['auth:company'])->get('/company/newApplications', [CompanyController::class, 'showApplications'])->name('company.applications');
+
 
 
 
@@ -90,4 +94,11 @@ Route::get('/companydashboard', [CompanyController::class, 'dashboard'])->name('
     Route::get('/allJobs', [UserController::class, 'allJobs'])->name('allJobs');
     Route::get('/allJobs/sort', [UserController::class, 'allJobs'])->name('allJobs.sort');
     Route::get('/job_details/{id}', [UserController::class, 'showJobDetails'])->name('job.details');
-    
+    use App\Http\Controllers\JobApplicationController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/job/{id}/apply', [JobApplicationController::class, 'show'])->name('job.apply');
+    Route::post('/job/{id}/apply', [JobApplicationController::class, 'store'])->name('job.store');
+});
+Route::get('/my-applications', [JobApplicationController::class, 'myApplications'])->name('myApplications');
+

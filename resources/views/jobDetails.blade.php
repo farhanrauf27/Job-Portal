@@ -86,7 +86,7 @@
                         <div class="apply-btn2">
                             @if(auth()->check())
                                 <!-- Button for logged-in users -->
-                                <a href="" class="btn5">Apply Now</a>
+                                <a href="{{ route('job.apply', $job->id) }}" class="btn5">Apply Now</a>
                             @else
                                 <!-- Disabled button with tooltip for non-logged-in users -->
                                 <a href="javascript:void(0)" class="btn disabled" data-tooltip="You need to log in first to apply">Apply Now</a>

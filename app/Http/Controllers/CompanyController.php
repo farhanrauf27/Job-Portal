@@ -9,10 +9,17 @@ use App\Models\Company;
 use App\Mail\JobPostedNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
+use App\Models\JobApplication;
 
 
 class CompanyController extends Controller
 {
+    public function __construct()
+{
+    // Ensure the company is authenticated using the 'company' guard
+    $this->middleware('auth:company');
+}
+
     // Show the company dashboard view
     public function dashboard()
 {
@@ -242,6 +249,54 @@ class CompanyController extends Controller
 }
 
 
-    
+// In your CompanyController
+public function showApplications(Request $request)
+{
+    // Get the authenticated company
+    $company = Auth::guard('company')->user();
+
+    // Fetch all jobs posted by the company
+    $jobs = Job::where('company_id', $company->id)->get();
+
+    // Fetch applications based on the selected job and status
+    $applicationsQuery = JobApplication::with('job', 'user')
+        ->whereHas('job', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        });
+
+    if ($request->has('job_id')) {
+        $applicationsQuery->where('job_id', $request->job_id);
+    }
+
+    // Filter applications based on status (new or past)
+    if ($request->get('application_status') === 'past') {
+        $applicationsQuery->whereIn('status', ['accepted', 'rejected']);
+    } else {
+        $applicationsQuery->whereIn('status', ['submitted', 'in_review']);
+    }
+
+    // Execute the query to get the applications
+    $applications = $applicationsQuery->get();
+
+    // Pass the applications and jobs to the view
+    return view('company.newApplications', compact('applications', 'jobs', 'company'));
+}
+
+public function updateApplicationStatus(Request $request, JobApplication $application)
+{
+    // Validate the input (ensure the status is one of the allowed values)
+    $validated = $request->validate([
+        'status' => 'required|in:submitted,in_review,accepted,rejected',
+    ]);
+
+    // Update the status of the application
+    $application->status = $validated['status'];
+    $application->save();
+
+    // Redirect back with a success message
+    return redirect()->route('company.applications')->with('success', 'Application status updated successfully.');
+}
+
+ 
 
 }
