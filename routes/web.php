@@ -30,7 +30,7 @@ use App\Http\Middleware\CheckAdmin;
 
 Route::middleware(['auth', CheckAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     // Admin dashboard route
-    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('dashboard', [AdminController::class, 'showJobAnalytics'])->name('dashboard');
     Route::get('users', [AdminController::class, 'showUsers'])->name('users');
     Route::delete('users/{id}', [AdminController::class, 'deleteUser'])->name('deleteUser');
     Route::get('jobs', [AdminController::class, 'showJobs'])->name('jobs');

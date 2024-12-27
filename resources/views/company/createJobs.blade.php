@@ -2,12 +2,10 @@
 
 @section('content')
 @if(session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            alert("{{ session('success') }}");
-        });
-    </script>
-@endif
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 
 <div class="container mt-5">
     <div class="row justify-content-center">

@@ -35,13 +35,11 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
-            'connection' => env('DB_QUEUE_CONNECTION'),
-            'table' => env('DB_QUEUE_TABLE', 'jobs'),
-            'queue' => env('DB_QUEUE', 'default'),
-            'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
-            'after_commit' => false,
-        ],
+        'driver' => 'database',
+        'table' => 'queue_jobs',
+        'queue' => 'default',
+        'retry_after' => 90,
+    ],
 
         'beanstalkd' => [
             'driver' => 'beanstalkd',

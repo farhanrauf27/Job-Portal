@@ -10,6 +10,8 @@ use App\Mail\JobPostedNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\JobApplication;
+// Store the job in the database
+use App\Jobs\SendEmailJob;
 
 
 class CompanyController extends Controller
@@ -45,52 +47,70 @@ class CompanyController extends Controller
         return view('company.createJobs', compact('company'));  // Show the job creation form
     }
 
-    // Store the job in the database
-    public function storeJob(Request $request)
-    {
-        // Ensure the company is logged in
-        if (!Auth::guard('company')->check()) {
-            return redirect()->route('company.login');  // Redirect to login if not authenticated
-        }
+    
 
-        // Validate and store the job data
-        $request->validate([
-            'job_title' => 'required|string|max:255',
-            'job_description' => 'required',
-            'required_skills' => 'required',
-            'education_experience' => 'required',
-            'category' => 'required',
-            'posted_date' => 'required|date',
-            'location' => 'required',
-            'vacancy' => 'required|integer',
-            'job_nature' => 'required',
-            'salary' => 'required|numeric',
-            'application_date' => 'required|date',
-        ]);
-
-        // Create the job and associate with the logged-in company
-        $job = new Job();
-        $job->company_id = Auth::guard('company')->id(); // Set the company ID
-        $job->job_title = $request->input('job_title');
-        $job->job_description = $request->input('job_description');
-        $job->required_skills = $request->input('required_skills');
-        $job->education_experience = $request->input('education_experience');
-        $job->category = $request->input('category');
-        $job->posted_date = $request->input('posted_date');
-        $job->location = $request->input('location');
-        $job->vacancy = $request->input('vacancy');
-        $job->job_nature = $request->input('job_nature');
-        $job->salary = $request->input('salary');
-        $job->application_date = $request->input('application_date');
-        
-        // $job->save();  // Save the job
-        // $users = User::all(); // Fetch all registered users
-        // foreach ($users as $user) {
-        //     Mail::to($user->email)->send(new JobPostedNotification($job));
-        // }
-
-        return redirect()->route('company.showJobs')->with('success', 'Job created successfully.');
+public function storeJob(Request $request)
+{
+    // Ensure the company is logged in
+    if (!Auth::guard('company')->check()) {
+        return redirect()->route('company.login');
     }
+
+    // Validate and store the job data
+    $request->validate([
+        'job_title' => 'required|string|max:255',
+        'job_description' => 'required',
+        'required_skills' => 'required',
+        'education_experience' => 'required',
+        'category' => 'required',
+        'posted_date' => 'required|date',
+        'location' => 'required',
+        'vacancy' => 'required|integer',
+        'job_nature' => 'required',
+        'salary' => 'required|numeric',
+        'application_date' => 'required|date',
+    ]);
+
+    // Create the job and associate it with the logged-in company
+    $job = new Job();
+    $job->company_id = Auth::guard('company')->id();
+    $job->job_title = $request->input('job_title');
+    $job->job_description = $request->input('job_description');
+    $job->required_skills = $request->input('required_skills');
+    $job->education_experience = $request->input('education_experience');
+    $job->category = $request->input('category');
+    $job->posted_date = $request->input('posted_date');
+    $job->location = $request->input('location');
+    $job->vacancy = $request->input('vacancy');
+    $job->job_nature = $request->input('job_nature');
+    $job->salary = $request->input('salary');
+    $job->application_date = $request->input('application_date');
+    $job->save(); // Save the job
+
+    // Fetch all registered users
+    $users = User::all();
+
+    // Dispatch email jobs for all users
+    foreach ($users as $user) {
+    $emailDetails = [
+        'to' => $user->email,
+        'subject' => 'New Job Posted: ' . $job->job_title,
+        // Use the Blade template for the email body
+        'body' => view('company.login', ['job' => $job, 'user' => $user])->render(),
+    ];
+
+    // Dispatch the job
+    SendEmailJob::dispatch($user, $job); // This should work now
+}
+
+
+    $company = Auth::guard('company')->user();
+    $jobs = Job::where('company_id', $company->id)->get();
+
+    return view('company.showJobs', compact('company','jobs'))->with('success', 'Job posted successfully! Notifications will be sent shortly.');
+
+}
+
 
     // Show the jobs for the logged-in company
     public function showJobs()

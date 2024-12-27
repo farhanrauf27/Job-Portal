@@ -11,12 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    // Admin dashboard view
-    public function dashboard()
-    {
-        $user = Auth::user();
-        return view('admin.dashboard', compact('user'));
-    }
+    
     public function showUsers()
     {
         $user = Auth::user();
