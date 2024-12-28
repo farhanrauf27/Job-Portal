@@ -11,6 +11,9 @@ use App\Http\Controllers\CompanyController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/about', function () {
+    return view('about');
+});
 
 Auth::routes();
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
