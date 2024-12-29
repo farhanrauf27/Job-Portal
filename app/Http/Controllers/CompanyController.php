@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\JobApplication;
 // Store the job in the database
 use App\Jobs\SendEmailJob;
+use App\Mail\ApplicationStatusChanged;
 
 
 class CompanyController extends Controller
@@ -302,20 +303,29 @@ public function showApplications(Request $request)
     return view('company.newApplications', compact('applications', 'jobs', 'company'));
 }
 
+
 public function updateApplicationStatus(Request $request, JobApplication $application)
 {
-    // Validate the input (ensure the status is one of the allowed values)
+    // Validate the input
     $validated = $request->validate([
         'status' => 'required|in:submitted,in_review,accepted,rejected',
     ]);
 
-    // Update the status of the application
+    // Update the application status
     $application->status = $validated['status'];
     $application->save();
 
+    // Queue the email notification
+    try {
+        Mail::to($application->user->email)->queue(new ApplicationStatusChanged($application));
+    } catch (\Exception $e) {
+        \Log::error('Email queueing failed: ' . $e->getMessage());
+    }
+
     // Redirect back with a success message
-    return redirect()->route('company.applications')->with('success', 'Application status updated successfully.');
+    return redirect()->route('company.applications')->with('success', 'Application status updated and email notification sent successfully.');
 }
+
 
  
 
