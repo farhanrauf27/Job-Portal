@@ -36,8 +36,8 @@ Email setup is already done in the system using mailtrap you just have to paste 
 run the command php artisan queue:work
 
 Email is setup on:
-1. Job Creation by the company
-2. Status of the application change by the company
+1. Job Creation by the company.
+2. Status of the application change by the company.
 
 
 
