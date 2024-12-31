@@ -33,11 +33,11 @@ for existing users in the database all the emails have password 12345678
 
 ## Email Integration
 Email setup is already done in the system using mailtrap you just have to paste yours mailtrap credentials in .env file and
-run the command php artisan queue:work
+run the command php artisan queue:work 
 
 Email is setup on:
-1. Job Creation by the company.
-2. Status of the application change by the company.
+1. Job Creation by the company
+2. Status of the application change by the company
 
 
 
